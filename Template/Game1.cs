@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+
 
 namespace Template
 {
@@ -13,7 +16,15 @@ namespace Template
         SpriteBatch spriteBatch;
         Texture2D AK;
         Vector2 AKpos = new Vector2(400, 200);
-        //KOmentar
+        Texture2D bullets;
+        Vector2 bulletspos = new Vector2(100, 800);
+        Rectangle hitbox = new Rectangle(400, 500, 100, 65);
+        List<Vector2> bulletsTT = new List<Vector2>();
+
+        
+        KeyboardState kNewstate;
+        KeyboardState kOldstate;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -42,7 +53,9 @@ namespace Template
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             AK = Content.Load<Texture2D>("AK");
-           
+            bullets = Content.Load<Texture2D>("bullets");
+
+
 
 
             // TODO: use this.Content to load your game content here 
@@ -68,6 +81,7 @@ namespace Template
                 Exit();
 
             KeyboardState kstate = Keyboard.GetState();
+            KeyboardState kNewstate = Keyboard.GetState();
             if (kstate.IsKeyDown(Keys.Right))
                 AKpos.X += 10;
             if (kstate.IsKeyDown(Keys.Left))
@@ -76,6 +90,18 @@ namespace Template
                 AKpos.Y -= 10;
             if (kstate.IsKeyDown(Keys.Down))
                 AKpos.Y += 10;
+            if (kNewstate.IsKeyDown(Keys.Space) && kOldstate.IsKeyUp(Keys.Space))
+            {
+                bulletsTT.Add(bulletspos);
+            }
+
+            for(int i = 0; i<bulletsTT.Count; i++)
+            {
+                bulletsTT[i] = bulletsTT[i] - new Vector2(0, 1);
+            }
+
+            kOldstate = kNewstate;
+
 
 
 
@@ -93,7 +119,10 @@ namespace Template
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             spriteBatch.Draw(AK, new Rectangle(AKpos.ToPoint(), new Point(100, 100)), Color.White);
+            spriteBatch.Draw(bullets, new Rectangle(bulletspos.ToPoint(), new Point(100, 100)), Color.White);
+            
             spriteBatch.End();
+
 
 
 
@@ -102,3 +131,4 @@ namespace Template
         }
     }
 }
+
