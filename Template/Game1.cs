@@ -67,6 +67,23 @@ namespace Template
         /// </summary>
         protected override void UnloadContent()
         {
+          
+            int counter = 1;
+            int limit = 50;
+            float countDuration = 2f;
+            float currentTime = 0f;
+
+            currentTime += (float)GameTime.ElapsedGameTime.TotalSeconds;
+
+            if (currentTime >= countDuration)
+            {
+                counter++;
+                currentTime -= countDuration;
+            }
+            if (counter >= limit)
+            {
+                counter = 0;
+            }
             // TODO: Unload any non ContentManager content here
         }
 
