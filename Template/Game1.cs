@@ -14,16 +14,18 @@ namespace Template
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D AK;
-        Vector2 AKpos = new Vector2(400, 200);
+
+        Texture2D AK; //bilden på skeppet
+        Vector2 AKpos = new Vector2(400, 200); //position
         Texture2D bullets;
         Vector2 bulletspos = new Vector2(100, 800);
         Rectangle hitbox = new Rectangle(400, 500, 100, 65);
-        List<Vector2> bulletsTT = new List<Vector2>();
+        List<Vector2> AKbulletsPos = new List<Vector2>();
 
-        
+
         KeyboardState kNewstate;
         KeyboardState kOldstate;
+        private object spriteBach;
 
         public Game1()
         {
@@ -67,8 +69,7 @@ namespace Template
         /// </summary>
         protected override void UnloadContent()
         {
-          
-            int counter = 1;
+            int counter = 1; //timern till spelet
             int limit = 50;
             float countDuration = 2f;
             float currentTime = 0f;
@@ -109,13 +110,15 @@ namespace Template
                 AKpos.Y += 10;
             if (kNewstate.IsKeyDown(Keys.Space) && kOldstate.IsKeyUp(Keys.Space))
             {
-                bulletsTT.Add(bulletspos);
+                AKbulletsPos.Add(bulletspos);
             }
 
-            for(int i = 0; i<bulletsTT.Count; i++)
+            for (int i = 0; i < AKbulletsPos.Count; i++)
             {
-                bulletsTT[i] = bulletsTT[i] - new Vector2(0, 1);
+                AKbulletsPos[i] = AKbulletsPos[i] - new Vector2(0, 1);
             }
+
+            RemoveObjects();//tar bort objekt säkert
 
             kOldstate = kNewstate;
 
@@ -137,7 +140,14 @@ namespace Template
             spriteBatch.Begin();
             spriteBatch.Draw(AK, new Rectangle(AKpos.ToPoint(), new Point(100, 100)), Color.White);
             spriteBatch.Draw(bullets, new Rectangle(bulletspos.ToPoint(), new Point(100, 100)), Color.White);
-            
+            foreach (Vector2 bulletspos in AKbulletsPos)
+            {
+                Rectangle rec = new Rectangle();
+                rec.Location = bulletspos.ToPoint();
+                rec.Size = new Point(30, 30);
+                spriteBach.Draw(AK, rec, Color.Red);
+            }
+
             spriteBatch.End();
 
 
@@ -146,6 +156,20 @@ namespace Template
 
             base.Draw(gameTime);
         }
+        void RemoveObjects()
+        {
+            List<Vector2> temp = new List<Vector2>();
+            foreach (var item in AKbulletsPos)
+            {
+                if (item.Y >= 50)
+                {
+                    temp.Add(item);
+                }
+            }
+
+            AKbulletsPos = temp;
+        }
     }
 }
+
 
