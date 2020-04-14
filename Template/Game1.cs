@@ -1,4 +1,4 @@
-
+﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -21,7 +21,8 @@ namespace Template
         Vector2 bulletspos = new Vector2(100, 800);
         Rectangle hitbox = new Rectangle(400, 500, 100, 65);
         List<Vector2> AKbulletsPos = new List<Vector2>();
-
+        List<Enemies> enemies = new List<Enemies>();
+        Random random = new Random();
 
         KeyboardState kNewstate;
         KeyboardState kOldstate;
@@ -88,11 +89,7 @@ namespace Template
             // TODO: Unload any non ContentManager content here
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        float spawn = 0;
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -128,6 +125,11 @@ namespace Template
             // TODO: Add your update logic here
 
             base.Update(gameTime);
+        }
+
+        public void LoadEnemies()
+        {
+            int randY = random.Next(100, 400);
         }
 
         /// <summary>
