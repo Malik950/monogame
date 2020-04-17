@@ -10,7 +10,7 @@ namespace Template
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -21,6 +21,10 @@ namespace Template
         Vector2 bulletspos = new Vector2(100, 800);
         Rectangle hitbox = new Rectangle(400, 500, 100, 65);
         List<Vector2> AKbulletsPos = new List<Vector2>();
+        List<Enemies> enemies = new List<Enemies>();
+        Random random = new Random();
+
+        //Game World
         List<Enemies> enemies = new List<Enemies>();
         Random random = new Random();
 
@@ -119,6 +123,16 @@ namespace Template
 
             kOldstate = kNewstate;
 
+            //Enemy spawn
+            {
+                spawn += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                foreach (spaceshooter.Enemies enemy in enemies)
+                    enemy.Update(graphics.GraphicsDevice);
+
+                base.Update(gameTime);
+            }
+
 
 
 
@@ -127,9 +141,22 @@ namespace Template
             base.Update(gameTime);
         }
 
-        public void LoadEnemies()
+        public void LoadEnemies() 
         {
             int randY = random.Next(100, 400);
+
+            if (spawn >= 1)
+            {
+                spawn = 0;
+                if(enemies.Count() < 4)
+                    enemies.Add(new Enemies(Content.Load<Texture2D>("Enemyship"), new Vector2(1100, randY)));
+            }
+            for(int i = 0; i < enemies.Count; i++)
+                if(!enemies[i].isVisible)
+                {
+                    enemies.RemoveAt(i);
+                    i--;
+                }
         }
 
         /// <summary>
